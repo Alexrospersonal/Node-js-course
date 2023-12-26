@@ -1,107 +1,105 @@
 "use strict"
 
-class Product {
+function Product(ID, name, description, price, brand, activeSize, quantity, date, images) {
 
-    constructor(ID, name, description, price, brand, activeSize, quantity, date, images) {
-        this._ID = ID;
-        this._name = name;
-        this._description = description;
-        this._price = price;
-        this._brand = brand;
-        this._sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
-        this._activeSize = activeSize;
-        this._quantity = quantity;
-        this._date = date;
-        this._images = images;
-        this._reviews = [];
-    }
+    this._ID = ID;
+    this._name = name;
+    this._description = description;
+    this._price = price;
+    this._brand = brand;
+    this._sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
+    this._activeSize = activeSize;
+    this._quantity = quantity;
+    this._date = date;
+    this._images = images;
+    this._reviews = [];
 
     // Getters and setters for class fields
-    getID() {
+    this.getID = function () {
         return this._ID;
     }
 
-    setID(value) {
+    this.setID = function (value) {
         this._ID = value;
     }
 
-    getName() {
+    this.getName = function () {
         return this._name;
     }
 
-    setName(value) {
+    this.setName = function (value) {
         this._name = value;
     }
 
-    getDescription() {
+    this.getDescription = function () {
         return this._description;
     }
 
-    setDesctiption(value) {
+    this.setDesctiption = function (value) {
         this._description = value;
     }
 
-    getPrice() {
+    this.getPrice = function () {
         return this._price;
     }
 
-    setPrice(value) {
+    this.setPrice = function (value) {
         this._price;
     }
 
-    getBrand() {
+    this.getBrand = function () {
         return this._brand;
     }
 
-    setBrand(value) {
+    this.setBrand = function (value) {
         this._brand;
     }
 
-    getSizes() {
+    this.getSizes = function () {
         return this._sizes;
     }
 
-    setSizes(value) {
+    this.setSizes = function (value) {
         this._sizes;
     }
 
-    getActiveSize() {
+    this.getActiveSize = function () {
         return this._activeSize;
     }
 
-    setActiveSize(value) {
+    this.setActiveSize = function (value) {
         this._activeSize;
     }
 
-    getQuantity() {
+    this.getQuantity = function () {
         return this._quantity;
     }
 
-    setQuantity(value) {
+    this.setQuantity = function (value) {
         this._quantity;
     }
 
-    getDate() {
+    this.getDate = function () {
         return this._date;
     }
 
-    setDate(value) {
+    this.setDate = function (value) {
         this._date;
     }
 
-    getReviews() {
+    this.getReviews = function () {
         return this._reviews;
     }
 
-    setReviews(value) {
+    this.setReviews = function (value) {
         this._reviews;
     }
 
-    getImages() {
+    this.getImages = function () {
         return this._images;
     }
 
-    setImages(value) {
+    this.setImages = function (value) {
         this._images;
     }
 
@@ -110,7 +108,7 @@ class Product {
      * @param {string} ID 
      * @returns Review instance or null.
      */
-    getReviewsByID(ID) {
+    this.getReviewsByID = function (ID) {
         this._reviews.forEach((review, idx, arr) => {
             if (review.ID === ID)
                 return review;
@@ -123,7 +121,7 @@ class Product {
      * @param {string} img 
      * @returns first img if param is default or img by param if param is name of img.
      */
-    getImage(img = 1) {
+    this.getImage = function (img = 1) {
         this._images.forEach((img, idx, arr) => {
             if (img === img)
                 return img;
@@ -135,7 +133,7 @@ class Product {
      * Throw the error if size isn't a string type. 
      * @param {string} size 
      */
-    addSize(size) {
+    this.addSize = function (size) {
         if (typeof size === 'string')
             this._sizes.push(size);
         else
@@ -146,7 +144,7 @@ class Product {
      * Throw the error if size isn't a string type. 
      * @param {string} size 
      */
-    deleteSize(size) {
+    this.deleteSize = function (size) {
         if (typeof size === 'string') {
             let idx = this._sizes.indexOf(size);
             if (idx !== -1) {
@@ -165,14 +163,14 @@ class Product {
      * @param {object} rating - Associate Array - rating['key']=value; 
         key one of 'service', 'price', 'value', 'quality'
      */
-    addReview(ID, author, date, comment, rating) {
+    this.addReview = function (ID, author, date, comment, rating) {
         this._reviews.push(new Review(ID, author, date, comment, rating));
     }
     /**
      * @description Delete review from arrya by reviewID
      * @param {string} reviewID 
      */
-    deleteReview(reviewID) {
+    this.deleteReview = function (reviewID) {
         this._reviews.forEach((review, idx, array) => {
             if (review.ID === reviewID) {
                 this._reviews.splice(idx, 1);
@@ -183,7 +181,7 @@ class Product {
      * @description Get average value of of product
      * @returns average value
      */
-    getAverageRating() {
+    this.getAverageRating = function () {
         let result = 0;
         let count = 0;
         this._reviews.forEach((review, idx, arr) => {
@@ -199,16 +197,14 @@ class Product {
 
 }
 
-class Review {
-    constructor(ID, author, date, comment, rating) {
-        this.ID = ID;
-        this.author = author;
-        this.date = date;
-        this.comment = comment;
-        this.rating = rating;
-    }
+function Review(ID, author, date, comment, rating) {
+    this.ID = ID;
+    this.author = author;
+    this.date = date;
+    this.comment = comment;
+    this.rating = rating;
 
-    toString() {
+    this.toString = function () {
         return `${this.ID} ${this.author} ${this.comment} ${this.rating}`;
     }
 }
@@ -228,7 +224,7 @@ let pad = new Product(
 pad.addReview('AS23ID', 'Alex', new Date(), 'nice pad', { 'service': 4.2, 'price': 2.3, 'value': 3.2, 'quality': 4.3 });
 pad.addReview('DK42OP', 'Tanya', new Date(), 'bad pad', { 'service': 4.2, 'price': 2.3, 'value': 3.2, 'quality': 4.3 });
 
-pad.getReviews().forEach((val, idx, arr) => console.log(val.toString()));
+pad.getReviews().forEach((val, idx, arr) => console.log(val));
 
 console.log(pad.getAverageRating());
 
