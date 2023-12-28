@@ -1,5 +1,17 @@
 "use strict"
 
+/**
+ * Create Product object.
+ * @param {string} ID 
+ * @param {string} name 
+ * @param {string} description 
+ * @param {number} price 
+ * @param {string} brand 
+ * @param {string} activeSize 
+ * @param {number} quantity 
+ * @param {Date} date 
+ * @param {array} images - with string name of image 
+ */
 function Product(ID, name, description, price, brand, activeSize, quantity, date, images) {
 
     this._ID = ID;
@@ -139,6 +151,7 @@ function Product(ID, name, description, price, brand, activeSize, quantity, date
         else
             throw new Error('Size must be a string');
     }
+
     /**
      * @description Delete a size from array if size is included in array.
      * Throw the error if size isn't a string type. 
@@ -154,6 +167,7 @@ function Product(ID, name, description, price, brand, activeSize, quantity, date
         else
             throw new Error('Size must be a string');
     }
+
     /**
      * @description Add to views array a new Review instance.
      * @param {string} ID 
@@ -166,17 +180,19 @@ function Product(ID, name, description, price, brand, activeSize, quantity, date
     this.addReview = function (ID, author, date, comment, rating) {
         this._reviews.push(new Review(ID, author, date, comment, rating));
     }
+
     /**
      * @description Delete review from arrya by reviewID
      * @param {string} reviewID 
      */
     this.deleteReview = function (reviewID) {
         this._reviews.forEach((review, idx, array) => {
-            if (review.ID === reviewID) {
+            if (review.getID() === reviewID) {
                 this._reviews.splice(idx, 1);
             }
         })
     }
+
     /**
      * @description Get average value of of product
      * @returns average value
@@ -184,9 +200,9 @@ function Product(ID, name, description, price, brand, activeSize, quantity, date
     this.getAverageRating = function () {
         let result = 0;
         let count = 0;
-        this._reviews.forEach((review, idx, arr) => {
+        this.getReviews().forEach((review, idx, arr) => {
 
-            for (let [key, value] of Object.entries(review.rating)) {
+            for (let [key, value] of Object.entries(review.getRating())) {
                 result += value;
                 count++;
             }
@@ -197,32 +213,186 @@ function Product(ID, name, description, price, brand, activeSize, quantity, date
 
 }
 
+/**
+ * Review container for products.
+ * @param {string} ID 
+ * @param {string} author 
+ * @param {Date} date 
+ * @param {string} comment 
+ * @param {Associate Array} rating - rating['key']=value; 
+        key one of 'service', 'price', 'value', 'quality'
+ */
 function Review(ID, author, date, comment, rating) {
-    this.ID = ID;
-    this.author = author;
-    this.date = date;
-    this.comment = comment;
-    this.rating = rating;
+    this._ID = ID;
+    this._author = author;
+    this._date = date;
+    this._comment = comment;
+    this._rating = rating;
 
-    this.toString = function () {
-        return `${this.ID} ${this.author} ${this.comment} ${this.rating}`;
+    // Getters and setters
+    this.getID = function () {
+        return this._ID;
+    }
+
+    this.setID = function (value) {
+        this._ID = value;
+    }
+
+    this.getAuthor = function () {
+        return this._author;
+    }
+
+    this.setAuthor = function (value) {
+        this._author = value;
+    }
+
+    this.getDate = function () {
+        return this._date;
+    }
+
+    this.setDate = function (value) {
+        this._date = value;
+    }
+
+    this.getComment = function () {
+        return this._comment;
+    }
+
+    this.setComment = function (value) {
+        this._comment = value;
+    }
+
+    this.getRating = function () {
+        return this._rating;
+    }
+
+    this.setRating = function (value) {
+        this._rating = value;
     }
 }
 
-let pad = new Product(
-    "1232355",
-    "Galaxy Tab 10",
-    "Mobile pad",
-    375.23,
-    "Samsung",
-    "L",
-    100,
-    new Date(),
-    ["img1.jpg"]
-);
+/**
+ * Searches the word in products.
+ * @param {array} products 
+ * @param {string} search 
+ * @returns The array with products which has the search word.
+ */
+function searchProducts(products, search) {
+    let searchResult = [];
 
+    products.forEach((product, idx, array) => {
+        let str = `${product.getName()} ${product.getDescription()}`.toLowerCase();
+
+        let prod = findSearchWordInProduct(search, str, searchResult, product);
+
+        if (prod !== null)
+            searchResult.push(prod);
+    });
+
+    return searchResult;
+}
+
+/**
+ * Finds the search word in the product.
+ * @param {string} search 
+ * @param {string} str 
+ * @param {Product} product 
+ * @returns product or null.
+ */
+function findSearchWordInProduct(search, str, product) {
+    let searchIdx = 0;
+    let startCountingLetters = false;
+    let prevLetter = '';
+    let searchWord = search.toLowerCase();
+
+    // Split search word to array and use forEach
+    str.split('').forEach((letter, idx, array) => {
+
+        // If letter equals a letter from searchWord
+        if (letter === searchWord[searchIdx]) {
+            // When found the first letter in row or the first letter
+            // in a word which equals letter from search than changes the flag to true.
+            if (searchIdx === 0 && (prevLetter === ' ' || prevLetter === '')) {
+                startCountingLetters = true;
+            }
+            if (startCountingLetters) {
+                searchIdx++;
+            }
+            if (searchIdx === search.length) {
+                return product;
+            }
+        } else {
+            searchIdx = 0;
+        }
+        prevLetter = letter;
+    });
+
+    return null;
+}
+
+/**
+ * Sorts the products array by rules in place.
+ * Allowed that rules: "name", "price", "ID".
+ * @param {array} products 
+ * @param {string} sortRule 
+ */
+function sortProducts(products, sortRule) {
+    switch (sortRule) {
+        case "name":
+            products.sort(sortByName);
+            break;
+        case "price":
+            products.sort(sortByPrice);
+            break;
+        case "ID":
+            products.sort(sortByID);
+            break;
+    };
+
+    function sortByPrice(a, b) {
+        return a.getPrice() - b.getPrice()
+    }
+
+    function sortByID(a, b) {
+        if (a.getID() > b.getID()) return 1;
+        if (a.getID() == b.getID()) return 0;
+        if (a.getID() < b.getID()) return -1;
+    };
+
+    function sortByName(a, b) {
+        if (a.getName() > b.getName()) return 1;
+        if (a.getName() == b.getName()) return 0;
+        if (a.getName() < b.getName()) return -1;
+    };
+}
+
+// Create Product instances
+let pad = new Product("KFC325", "Galaxy Tab 10", "Mobile pad", 375.23, "Samsung", "L", 100, new Date(), ["img1.jpg"]);
+let iPhone = new Product("ASC345", "iPhone", "mobile phone", 999.99, "Apple", "XL", 100, new Date(), ["img1.jpeg", "img2.jpeg", "img3.jpeg"])
+let phone = new Product("ADF976", "Pro Alpha 99", "The best mobile phone", 300, "Xiaomi", "S", 30, new Date(), ["img1.jpg"]);
+let staff = new Product("ASR643", "phonesnets", "Cool stuff", 73, "Tablets", "XL", 888, new Date(), []);
+
+// // test searchProducts
+let res = searchProducts([pad, iPhone, phone, staff], "Phone");
+
+for (const obj of res) {
+    console.log(obj);
+}
+
+// test sortProducts
+let products = [pad, iPhone, phone, staff];
+
+sortProducts(products, "price");
+
+for (const obj of products) {
+    console.log(obj);
+}
+
+// test getAverageRating
 pad.addReview('AS23ID', 'Alex', new Date(), 'nice pad', { 'service': 4.2, 'price': 2.3, 'value': 3.2, 'quality': 4.3 });
 pad.addReview('DK42OP', 'Tanya', new Date(), 'bad pad', { 'service': 4.2, 'price': 2.3, 'value': 3.2, 'quality': 4.3 });
+
+// pad.deleteReview('AS23ID');
 
 pad.getReviews().forEach((val, idx, arr) => console.log(val));
 
