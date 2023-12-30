@@ -398,3 +398,5 @@ pad.getReviews().forEach((val, idx, arr) => console.log(val));
 
 console.log(pad.getAverageRating());
 
+
+console.log(.3333);
