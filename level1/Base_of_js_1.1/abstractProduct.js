@@ -1,5 +1,7 @@
 "use strict"
 
+// 1) Додати коментарі та повторити теорію про наслідування та ооп
+
 function AbstractProduct(ID, name, description, price, quantity, images, date, brand) {
     if (this.constructor === AbstractProduct) {
         throw new Error("Cannot instantiate an abstract class.");
@@ -144,7 +146,8 @@ function Clothes(ID, name, description, price, quantity, images, date, brand, ma
     };
 }
 
-Clothes.prototype = Object.create(AbstractProduct.prototype);
+// Clothes.prototype = Object.create(AbstractProduct.prototype);
+Object.setPrototypeOf(Clothes.prototype, AbstractProduct.prototype)
 Clothes.prototype.constructor = Clothes;
 
 function Electronics(ID, name, description, price, quantity, images, date, brand, warranty, power) {
@@ -169,7 +172,8 @@ function Electronics(ID, name, description, price, quantity, images, date, brand
     };
 }
 
-Electronics.prototype = Object.create(AbstractProduct.prototype);
+// Electronics.prototype = Object.create(AbstractProduct.prototype);
+Object.setPrototypeOf(Electronics.prototype, AbstractProduct.prototype);
 Electronics.prototype.constructor = Electronics;
 
 let tShirt = new Clothes("KFC325", "Big Wolf", "Cool modern T-Shirt", 19.25, 76, ["img"], new Date(), "cTc", "cotton", "blue");

@@ -80,3 +80,21 @@ let validator = new Validator();
 // validator.validatePhone("+48 (0989) 567 8901");
 
 
+
+// 1231231223123131_FILE_NAME.EXTENSION.OTHEREXTENSION
+
+// 1_This_is_an_otherExample.mpg.OTHEREXTENSIONadasdassdassds34
+
+// 1231231223123131_myFile.tar.gz2
+
+// FILE_NAME.EXTENSION
+
+// This_is_an_otherExample.mpg
+
+// myFile.tar
+
+let regExp = /(?<=\d+\_+)(\w+_*\w+){1,}\.[a-z0-9]+/i;
+
+console.log("1231231223123131_FILE_NAME.EXTENSION.OTHEREXTENSION".match(regExp)[0]);
+console.log("1_This_is_an_otherExample.mpg.OTHEREXTENSIONadasdassdassds34".match(regExp)[0]);
+console.log("1231231223123131_myFile.tar.gz2".match(regExp)[0]);
