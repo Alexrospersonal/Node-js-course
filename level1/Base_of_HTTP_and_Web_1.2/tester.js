@@ -74,7 +74,7 @@ Connection: Closed
 Content-Type: text/html; charset=utf-8
 
 <h1 style="color:green">FOUND</h1>`,
-    5: `please do it yourself`,
+    5: `login=student&password=12345`,
 }
 
 const execSync = exports.execSync = (cmd, input) => {
