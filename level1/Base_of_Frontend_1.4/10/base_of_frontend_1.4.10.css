@@ -1,0 +1,13 @@
+body {
+    display: flex;
+    align-items: end;
+    justify-content: start;
+    flex-direction: column;
+    height: 95vh;
+}
+
+#ui_container {
+    width: 100px;
+    height: 35px;
+    background-color: chartreuse;
+}
