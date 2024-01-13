@@ -1,0 +1,23 @@
+body {
+    height: 95vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.outer_container {
+    min-width: 500px;
+    height: auto;
+    padding: 40px;
+    background-color: rgb(236, 236, 236);
+    border-radius: 10px;
+
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.inner_container {
+    margin: 10px;
+}

@@ -1,0 +1,19 @@
+body {
+    height: 95vh;
+    display: flex;
+    justify-content: center;
+    background-color: rgb(231, 231, 231);
+}
+
+#scroll_btn {
+    position: fixed;
+    display: none;
+    bottom: 50px;
+    right: 30px;
+    background-color: rgb(114, 224, 200);
+    color: white;
+    width: 70px;
+    height: 20px;
+    color: white;
+    border: none;
+}

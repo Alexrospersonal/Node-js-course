@@ -1,0 +1,41 @@
+body {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+input[type="file"] {
+    position: relative;
+    background-color: rgb(233, 233, 233);
+    border-radius: 5px;
+    padding: 20px;
+    border: 1px solid white;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+    transition: ease-in .3s width, ease-in .3s background-color, ease-in .3s color;
+    width: 100px;
+    color: transparent;
+}
+
+input[type="file"]::file-selector-button {
+    position: relative;
+    width: 100px;
+    height: 40px;
+    color: rgb(255, 255, 255);
+    border: none;
+    border-radius: 5px;
+    border-bottom: 2px solid rgb(7, 48, 28);
+    background-color: rgb(44, 47, 243);
+}
+
+input[type="file"]::file-selector-button:hover {
+    transition: ease-in .3s background-color;
+    background-color: rgb(28, 31, 211);
+}
+
+input[type="file"]::file-selector-button:active {
+    top: 2px;
+    border: none;
+    background-color: rgb(20, 22, 168);
+}

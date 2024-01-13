@@ -1,0 +1,49 @@
+@import url('https://fonts.googleapis.com/css2?family=Maven+Pro:wght@400;700&display=swap');
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-family: 'Maven Pro', sans-serif;
+    background-color: rgb(45, 136, 255);
+}
+
+h1 {
+    font-size: 40px;
+    text-transform: uppercase;
+}
+
+.tasks_container {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+
+    width: 450px;
+    height: 555px;
+    background-color: rgb(37, 45, 70);
+    padding: 30px;
+    border-radius: 5px;
+    align-items: center;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.task {
+    background-color: white;
+    width: 200px;
+    height: 30px;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 5px;
+    text-decoration: none;
+    font-size: 16px;
+    color: black;
+    transition: ease-out 0.3s background-color, ease-out 0.3s height;
+}
+
+.task:hover {
+    background-color: rgb(255, 234, 45);
+    box-shadow: none;
+    height: 35px;
+    transition: ease-out 0.3s background-color, ease-out 0.3s height;
+}
