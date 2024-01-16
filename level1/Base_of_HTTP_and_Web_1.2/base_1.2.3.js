@@ -1,7 +1,3 @@
-// цей файл потрібно буде дописати...
-
-// не звертайте увагу на цю функцію 
-// вона потрібна для того, щоб коректно зчитувати вхідні данні
 function readHttpLikeInput() {
     var fs = require("fs");
     var res = "";
@@ -23,7 +19,6 @@ function readHttpLikeInput() {
 
 let contents = readHttpLikeInput();
 
-// ось цю функцію, власне, і треба написати
 function parseTcpStringAsHttpRequest(string) {
     let [head, body] = string.split('\n\n');
     let [url, ...headContet] = head.split('\n');
