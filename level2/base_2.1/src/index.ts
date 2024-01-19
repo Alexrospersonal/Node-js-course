@@ -1,4 +1,3 @@
-
 // 1. 
 
 function getFirstWord(a: string): number {

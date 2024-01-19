@@ -34,20 +34,20 @@ class Cat extends Animal {
 }
 class Dog extends Animal {
 }
-function hey(abstractPet) {
+function hey2(abstractPet) {
     return "hey! i'm " + abstractPet.name();
 }
 let a = new Cat("myavchik", true);
 let b = new Dog("gavchik", 333);
-hey(a);
-hey(b);
+hey2(a);
+hey2(b);
 // 4.3
-function hey(a) {
+function hey3(a) {
     return "hey! i'm " + a.name()
         + (a.type === "cat" ? ("cuteness: " + a.cuteness) : ("coolness: " + a.coolness));
 }
-hey({ name: () => "roma", type: "cat", cuteness: 100 });
-hey({ name: () => "vasya", type: "dog", coolness: 100 });
+hey3({ name: () => "roma", type: "cat", cuteness: 100 });
+hey3({ name: () => "vasya", type: "dog", coolness: 100 });
 // 5.
 // google for Record type
 function stringEntries(a) {
