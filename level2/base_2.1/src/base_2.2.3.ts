@@ -57,7 +57,7 @@ fetch(url)
     .then((response) => {
         return response.json().then((response) => {
             arr.push((<JsonResponse>response).name)
-            return fetch(url);
         })
     }).
     finally(() => console.log(arr.join('\n')))
+
