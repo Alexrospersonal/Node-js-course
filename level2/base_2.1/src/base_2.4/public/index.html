@@ -508,6 +508,7 @@ README:
                         fetch(this.apiURL + this.apiVersion + route + this.backendSuffix + '?' + new URLSearchParams(qs), {
                             method: this.apiVersion === 'v1' ? 'POST' : 'POST',
                             body: params,
+                            credentials: 'include',
                             headers: {
                                 'Content-Type': 'application/json'
                             },

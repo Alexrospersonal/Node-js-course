@@ -24,7 +24,7 @@ export function validateUserLoginRequestBody(req: Request): boolean {
 
 export function validateUserLoginData(req: Request, res: Response): boolean {
     if (req.session.user) {
-        if (req.body.login === req.session.user.username && req.body.pass === req.session.user.password) {
+        if (req.body.login === req.session.user.username) {
             return true;
         } else {
             return false;

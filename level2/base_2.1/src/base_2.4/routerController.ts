@@ -1,46 +1,92 @@
-import { DBType, addNewToDo } from "./server.js";
-import { validateRequstToDoText } from "./validators.js";
+import { Db, ObjectId } from "mongodb";
+import { HTTP_CODES, HTTP_MESSAGES } from "./settings.js";
 import { Request, Response } from 'express';
+
 
 export class RouterController {
 
-    private DB: DBType;
+    private db: Db;
 
-    public constructor(db: DBType) {
-        this.DB = db;
+    public constructor(db: Db) {
+        this.db = db;
     }
 
-    public getItems(req: Request, res: Response) {
-        if (this.DB) {
-            res.json(this.DB);
+    public async getItems(req: Request, res: Response): Promise<void> {
+        if (req.session.user) {
+            const user = await this.db.collection('clients').findOne({ "username": req.session.user });
+            if (user) {
+                res.json({ items: user.todos });
+            }
         } else {
-            res.status(500).json({ "error": "File not found" });
+            res.json({ items: [] });
         }
     }
 
-    public addItem(req: Request, res: Response) {
-        if (validateRequstToDoText(req.body)) {
-            const newToDoId = addNewToDo(req.body.text);
-            res.status(201);
-            res.json({ id: newToDoId });
+    public async addItem(req: Request, res: Response): Promise<void> {
+        if (req.session.user) {
+            const todoId = await this.addToDo(req);
+            res.json({ "id": todoId });
         } else {
-            res.sendStatus(400).json({ "error": "Bad request" });
+            res.sendStatus(HTTP_CODES.BAD_REQUEST).json({ "error": HTTP_MESSAGES.BAD_REQUEST });
         }
     }
 
-    public editItem(req: Request, res: Response) {
-        const toDo = this.DB.items.find(p => p.id === +req.body.id);
-        if (toDo) {
-            toDo.text = req.body.text;
-            toDo.checked = req.body.checked;
+    public async editItem(req: Request, res: Response): Promise<void> {
+        if (req.session.user) {
+            await this.editToDo(req);
             res.json({ "ok": true });
         } else {
-            res.status(400).json({ "error": "To do not found" });
+            res.sendStatus(HTTP_CODES.BAD_REQUEST).json({ "error": HTTP_MESSAGES.BAD_REQUEST });
         }
     }
 
-    public deleteItem(req: Request, res: Response) {
-        this.DB.items = this.DB.items.filter(p => p.id !== +req.body.id);
-        res.json({ "ok": true });
+    public async deleteItem(req: Request, res: Response): Promise<void> {
+        if (req.session.user) {
+            await this.deleteToDo(req)
+            res.json({ "ok": true });
+        } else {
+            res.sendStatus(HTTP_CODES.BAD_REQUEST).json({ "error": HTTP_MESSAGES.BAD_REQUEST });
+        }
+    }
+
+    private async deleteToDo(req: Request): Promise<void> {
+        await this.db.collection('clients').updateOne(
+            {
+                "username": req.session.user
+            },
+            {
+                $pull: {
+                    todos: {
+                        id: new ObjectId(<string>req.body.id),
+                    }
+                }
+            }
+        );
+    }
+
+    private async editToDo(req: Request): Promise<void> {
+        await this.db.collection('clients').updateOne(
+            {
+                "username": req.session.user,
+                "todos.id": new ObjectId(<string>req.body.id)
+            },
+            {
+                $set: {
+                    'todos.$.text': req.body.text,
+                    'todos.$.checked': req.body.checked,
+                }
+            }
+        );
+    }
+
+    private async addToDo(req: Request): Promise<ObjectId> {
+        let todoId = new ObjectId();
+
+        await this.db.collection('clients').updateOne(
+            { "username": req.session.user },
+            { $push: { todos: { id: todoId, text: req.body.text, checked: false } } }
+        );
+
+        return todoId;
     }
 }

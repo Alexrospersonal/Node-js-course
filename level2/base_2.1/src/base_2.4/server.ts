@@ -1,64 +1,28 @@
-import express, { Express, Request, Response, Router } from 'express';
-import path from 'path';
-import session, { SessionOptions } from 'express-session';
-import cors from 'cors';
-import f, { FileStore } from 'session-file-store';
-import fs from 'fs';
-import { validateUserLoginData, validateUserLoginRequestBody } from './validators.js';
-import { BaseRouter } from './baseRouter.js';
-import { UserController } from './userController.js';
-import { RouterController } from './routerController.js';
+import { PORT } from './settings.js';
+import { connectToDb } from './db.js';
+import { BaseServer } from './baseServer.js';
 
 declare module 'express-session' {
     interface SessionData {
-        user?: { username: string, password: string } | null;
+        user?: { username: string } | null;
     }
 }
 
-let itemsId: number = 0;
+async function runServer() {
+    const db = await connectToDb();
+    const app = new BaseServer(db).createServer();
 
-type ToDoType = {
-    id: number,
-    text: string,
-    checked: boolean
+    app.listen(PORT, () => {
+        console.log(`Listen the ${PORT}`);
+    });
 }
 
-type DBType = { items: ToDoType[] }
-
-const DB: DBType = { items: [] }
-const PORT = 3200;
-const app: Express = express();
-const rootPath = 'D:\\Node-js-course\\level2\\base_2.1\\src\\base_2.4';
-const staticMiddleware = express.static('public');
-const jsonBodyMiddleware = express.json();
-const fileStore: FileStore = f(session);
-
-const sessionObj: SessionOptions = {
-    store: new fileStore({
-        ttl: 86400
-    }),
-    secret: '23E23ZS3!@e!e' + Math.random() * 1000,
-    resave: false,
-    saveUninitialized: false,
+try {
+    runServer();
+} catch (e) {
+    console.error(e);
 }
 
-const corsOptions = {
-    origin: 'http://localhost:8080',
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: true,
-}
-
-const userController: UserController = new UserController();
-const routerController: RouterController = new RouterController(DB);
-const baseRouter: Router = new BaseRouter(userController, routerController).createRouter();
-
-app.use(jsonBodyMiddleware);
-app.use(staticMiddleware);
-app.use(cors(corsOptions));
-app.use(session(sessionObj));
-app.use('/api/v2/', baseRouter);
-
-app.enable('trust proxy');
 
 // app.get('/', (req: Request, res: Response) => {
 //     console.log("User", req.session.user);
@@ -137,28 +101,3 @@ app.enable('trust proxy');
 //     DB.items = DB.items.filter(p => p.id !== +req.body.id);
 //     res.json({ "ok": true });
 // });
-
-app.listen(PORT, () => {
-    console.log('Listen the ' + PORT);
-});
-
-function userAuthentication(req: Request, res: Response) {
-    if (validateUserLoginRequestBody(req)) {
-        if (validateUserLoginData(req, res)) {
-            res.json({ "ok": true });
-        } else {
-            res.status(400).json({ "error": "not found" });
-        }
-    } else {
-        res.status(400).json({ "error": "Bad request" });
-    }
-}
-
-function addNewToDo(text: string): number {
-    const todo = { id: ++itemsId, text: text, checked: false };
-    DB.items.push(todo);
-    console.log("Item ID", itemsId);
-    return todo.id;
-}
-
-export { DBType, addNewToDo, userAuthentication };
