@@ -1,21 +1,34 @@
 import express, { Request, Response, Router } from 'express';
 import { UserController } from './userController.js';
-import { RouterController } from './routerController.js';
+import { ToDoRouterController } from './routerController.js';
 
-
+/**
+ * Class creates the base router
+ */
 export class BaseRouter {
-    private uC: UserController;
-    private rC: RouterController;
-    private router: Router;
-
-    public constructor(userController: UserController, routerController: RouterController) {
+    private readonly uC: UserController;
+    private readonly rC: ToDoRouterController;
+    private readonly router: Router;
+    private readonly routerUri: string = "/router";
+    /**
+     * Constructor gets two parameters
+     * and create the new router object.
+     * @param userController 
+     * @param routerController 
+     */
+    public constructor(userController: UserController, routerController: ToDoRouterController) {
         this.uC = userController;
         this.rC = routerController;
         this.router = express.Router();
     }
 
+    /**
+     * Configures the router. Creates some new routings.
+     * @returns instance of Router
+     */
     public createRouter(): Router {
-        this.router.post('/router', (req: Request, res: Response) => {
+        this.router.post(this.routerUri, (req: Request, res: Response) => {
+            // Get action from request.
             const action = req.query.action;
 
             switch (action) {

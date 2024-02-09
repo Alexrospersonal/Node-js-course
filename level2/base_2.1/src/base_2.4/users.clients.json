@@ -1,0 +1,26 @@
+[
+  {
+    "_id": {
+      "$oid": "65c254df8cb287f5a668ee5d"
+    },
+    "username": "ros",
+    "password": "$2b$10$kthJFzTD8cwqAd7gWmH96OIU0yCAEOOoxGg8ktveUz2ywgtZ0t8pm",
+    "todos": [
+      {
+        "id": {
+          "$oid": "65c3434c735090714bd13202"
+        },
+        "text": "test 44",
+        "checked": false
+      }
+    ]
+  },
+  {
+    "_id": {
+      "$oid": "65c27f3b348460c1d365dd69"
+    },
+    "username": "oleg",
+    "password": "$2b$10$lkPKxeoLirjHC3tFEhCBlO9zuERNxNOHf6nJdvDW6sG/T6bS9URIy",
+    "todos": []
+  }
+]

@@ -2,16 +2,24 @@ import { Db, ObjectId } from "mongodb";
 import { HTTP_CODES, HTTP_MESSAGES } from "./settings.js";
 import { Request, Response } from 'express';
 
+/**
+ * Class create todo router controller.
+ */
+export class ToDoRouterController {
 
-export class RouterController {
-
-    private db: Db;
+    private readonly db: Db;
 
     public constructor(db: Db) {
         this.db = db;
     }
 
+    /**
+     * Gets all todo by the user.
+     * @param req Express request object
+     * @param res Express response object
+     */
     public async getItems(req: Request, res: Response): Promise<void> {
+        // Checks if the user is logged in
         if (req.session.user) {
             const user = await this.db.collection('clients').findOne({ "username": req.session.user });
             if (user) {
@@ -22,7 +30,13 @@ export class RouterController {
         }
     }
 
+    /**
+     * Adds a todo to the Db collection.
+     * @param req Express request object
+     * @param res Express response object
+     */
     public async addItem(req: Request, res: Response): Promise<void> {
+        // Checks if the user is logged in
         if (req.session.user) {
             const todoId = await this.addToDo(req);
             res.json({ "id": todoId });
@@ -30,8 +44,13 @@ export class RouterController {
             res.sendStatus(HTTP_CODES.BAD_REQUEST).json({ "error": HTTP_MESSAGES.BAD_REQUEST });
         }
     }
-
+    /**
+     * Edits a todo from the Db collection.
+     * @param req Express request object
+     * @param res Express response object
+     */
     public async editItem(req: Request, res: Response): Promise<void> {
+        // Checks if the user is logged in
         if (req.session.user) {
             await this.editToDo(req);
             res.json({ "ok": true });
@@ -40,7 +59,13 @@ export class RouterController {
         }
     }
 
+    /**
+     * Delete a todo from the Db collection.
+     * @param req Express request object
+     * @param res Express response object
+     */
     public async deleteItem(req: Request, res: Response): Promise<void> {
+        // Checks if the user is logged in
         if (req.session.user) {
             await this.deleteToDo(req)
             res.json({ "ok": true });
@@ -49,6 +74,10 @@ export class RouterController {
         }
     }
 
+    /**
+     * Sends a request to the database to delete todo
+     * @param req Express request object
+     */
     private async deleteToDo(req: Request): Promise<void> {
         await this.db.collection('clients').updateOne(
             {
@@ -64,6 +93,10 @@ export class RouterController {
         );
     }
 
+    /**
+     * Sends a request to the database to edit todo
+     * @param req Express request object
+     */
     private async editToDo(req: Request): Promise<void> {
         await this.db.collection('clients').updateOne(
             {
@@ -79,6 +112,10 @@ export class RouterController {
         );
     }
 
+    /**
+     * Sends a request to the database to add todo
+     * @param req Express request object
+     */
     private async addToDo(req: Request): Promise<ObjectId> {
         let todoId = new ObjectId();
 

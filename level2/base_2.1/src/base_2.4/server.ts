@@ -8,8 +8,10 @@ declare module 'express-session' {
     }
 }
 
-async function runServer() {
+async function runServer(): Promise<void> {
+    // create a new db connection
     const db = await connectToDb();
+    // create base server
     const app = new BaseServer(db).createServer();
 
     app.listen(PORT, () => {
@@ -37,67 +39,4 @@ try {
 //             });
 //         }
 //     })
-// });
-
-// // Login
-// app.post('/api/v1/login', (req: Request, res: Response) => {
-//     userAuthentication(req, res);
-// });
-
-// // logout
-// app.post('/api/v1/logout', (req: Request, res: Response) => {
-//     res.json({ "ok": true });
-// });
-
-// // Register
-// app.post('/api/v1/register', (req: Request, res: Response) => {
-//     if (validateUserLoginRequestBody(req)) {
-//         const { login: user, pass: password }: { login: string, pass: string } = req.body;
-
-//         console.log("Body", req.body);
-
-//         req.session.user = {
-//             username: user,
-//             password: password
-//         };
-
-//         res.json({ "ok": true });
-//     } else {
-//         res.status(400).json({ "error": "Bad request" })
-//     }
-
-// });
-
-// app.get('/api/v1/items', (req: Request, res: Response) => {
-//     if (DB) {
-//         res.json(DB);
-//     } else {
-//         res.status(500).json({ "error": "File not found" });
-//     }
-// })
-
-// app.post('/api/v1/items', (req: Request, res: Response) => {
-//     if (validateRequstToDoText(req.body)) {
-//         const newToDoId = addNewToDo(req.body.text);
-//         res.status(201);
-//         res.json({ id: newToDoId });
-//     } else {
-//         res.sendStatus(400).json({ "error": "Bad request" });
-//     }
-// });
-
-// app.put('/api/v1/items', (req: Request, res: Response) => {
-//     const toDo = DB.items.find(p => p.id === +req.body.id);
-//     if (toDo) {
-//         toDo.text = req.body.text;
-//         toDo.checked = req.body.checked;
-//         res.json({ "ok": true });
-//     } else {
-//         res.status(400).json({ "error": "To do not found" });
-//     }
-// });
-
-// app.delete('/api/v1/items', (req: Request, res: Response) => {
-//     DB.items = DB.items.filter(p => p.id !== +req.body.id);
-//     res.json({ "ok": true });
 // });

@@ -14,16 +14,19 @@ enum HTTP_MESSAGES {
     SERVER_ERROR = "File not found"
 }
 
+// Server settings
 const PORT = 3200;
 const API_URI = '/api/v2/';
 const URL: string = 'mongodb://localhost:27017';
 const DB_NAME: string = 'users';
 
+// Creates some middlewares
 // const rootPath = 'D:\\Node-js-course\\level2\\base_2.1\\src\\base_2.4';
 const staticMiddleware = express.static('public');
 const jsonBodyMiddleware = express.json();
 const fileStore: FileStore = f(session);
 
+// Setting session object
 const sessionObj: SessionOptions = {
     store: new fileStore({
         ttl: 86400
@@ -33,6 +36,7 @@ const sessionObj: SessionOptions = {
     saveUninitialized: false,
 }
 
+// Setting CORS options object
 const corsOptions = {
     origin: 'http://localhost:8080',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
