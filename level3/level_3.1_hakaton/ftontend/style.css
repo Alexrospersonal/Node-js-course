@@ -1,0 +1,42 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px;
+}
+
+label {
+    width: 100px;
+    height: 100px;
+    background-color: rgb(222, 225, 255);
+    border-radius: 10px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+
+    margin-bottom: 5px;
+}
+
+input {
+    width: 100px;
+    height: 35px;
+    border-style: none;
+
+    border-radius: 5px;
+    background-color: rgb(30, 231, 114);
+
+    font-size: 18px;
+    color: white;
+}
+
+input:hover {
+    background-color: rgb(42, 221, 116);
+}
