@@ -74,4 +74,31 @@ const labmda = (x: any) => x > 2;
 // const newObject = mapObject(oldObject, (x) => x > 2);
 // console.log(newObject);
 
+type PartialData<T> = Partial<T>;
+type PartialDataWithId<T> = PartialData<T> & { id?: string };
 
+type EnhanceFunction<T> = (partial: PartialData<T>) => T;
+type EnhanceFunctionWithId<T> = (partial: PartialDataWithId<T>) => T;
+
+type ClassType<T> = new () => T;
+
+function createSomeClasses<T>(someClass: ClassType<T>, count: number): T[] {
+    const arr: T[] = [];
+
+    for (let i = 0; i < count; i++) {
+        arr.push(new someClass());
+    }
+
+    return arr;
+}
+
+class Rectangle {
+    w!: number;
+    h!: number;
+}
+class Circle {
+    radius!: number;
+}
+
+let aClasses: Rectangle[] = createSomeClasses(Rectangle, 10);
+let bClasses: Circle[] = createSomeClasses(Circle, 20)
